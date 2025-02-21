@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public enum ErrorCode {
-    EMPLOYEE_NOT_EXISTS(40401, "Employee not exists", HttpStatus.NOT_FOUND);
+    EMPLOYEE_NOT_EXISTS(40401, "Employee not exists", HttpStatus.NOT_FOUND),
+    DEPARTMENT_NOT_EXISTS(40402, "Department not exists", HttpStatus.NOT_FOUND);
+
     final int code;
     final String message;
     final HttpStatus status;
