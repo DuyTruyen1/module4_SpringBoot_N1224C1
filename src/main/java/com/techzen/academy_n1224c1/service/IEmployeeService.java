@@ -14,14 +14,14 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface IEmployeeService {
-    List<Employee> findByAttributes(
-            String name,
-            LocalDate dobFrom,
-            LocalDate dobTo,
-            Gender gender,
-            String salaryRange,
-            String phone,
-            Integer departmentId
-    );
+
+
+    List<Employee> findByAttribute(EmployeeSearchRequest employeeSearchRequest);
+
+    Optional<Employee> findById(UUID id);
+
+    Employee save(Employee employee);
+
+    void delete(UUID id);
 }
 

@@ -15,11 +15,8 @@ import java.time.LocalDate;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EmployeeSearchRequest {
     String name;
-
     LocalDate dobFrom;
-
     LocalDate dobTo;
-
     Gender gender;
     String salaryRange;
     String phone;

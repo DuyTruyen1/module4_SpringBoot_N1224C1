@@ -11,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,19 +26,35 @@ import java.util.stream.Collectors;
 public class EmployeeController {
     IEmployeeService employeeService;
 
-    @GetMapping("/search")
-    public ResponseEntity<List<Employee>> searchEmployees(
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dobFrom,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dobTo,
-            @RequestParam(required = false) Gender gender,
-            @RequestParam(required = false) String salaryRange,
-            @RequestParam(required = false) String phone,
-            @RequestParam(required = false) Integer departmentId
-    ) {
-        List<Employee> employees = employeeService.findByAttributes(name, dobFrom, dobTo, gender, salaryRange, phone, departmentId);
-        return ResponseEntity.ok(employees);
+    @GetMapping
+    public ResponseEntity<?> getEmployees(EmployeeSearchRequest employeeSearchRequest) {
+        return ResponseEntity.ok(employeeService.findByAttribute(employeeSearchRequest));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Employee> getEmployeeById(@PathVariable UUID id) {
+        return employeeService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new ApiException(ErrorCode.EMPLOYEE_NOT_EXISTS));
+    }
 
+    @PostMapping
+    public ResponseEntity<?> createEmployee(@RequestBody Employee employee) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(employeeService.save(employee));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Employee> updateEmployee(@PathVariable("id") UUID id, @RequestBody Employee employee) {
+        employeeService.findById(id)
+                .orElseThrow(() -> new ApiException(ErrorCode.EMPLOYEE_NOT_EXISTS));
+        employee.setId(id);
+        return ResponseEntity.ok(employeeService.save(employee));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteEmployee(@PathVariable("id") UUID id) {
+        employeeService.findById(id).orElseThrow(() -> new ApiException(ErrorCode.EMPLOYEE_NOT_EXISTS));
+        employeeService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }

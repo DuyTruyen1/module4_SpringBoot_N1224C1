@@ -19,14 +19,34 @@ import java.util.UUID;
 
 @Service
 public class EmployeeService implements IEmployeeService {
-    @Autowired
+
     IEmployeeRepository employeeRepository;
+
     @Override
-    public List<Employee> findByAttributes(String name, LocalDate dobFrom, LocalDate dobTo, Gender gender, String salaryRange, String phone, Integer departmentId) {
-        return employeeRepository.findByAttributes(name, dobFrom, dobTo, gender, salaryRange, phone, departmentId);
+    public List<Employee> findByAttribute(EmployeeSearchRequest employeeSearchRequest) {
+        return employeeRepository.findByAttributes(employeeSearchRequest.getName(),
+                employeeSearchRequest.getDobFrom(),
+                employeeSearchRequest.getDobTo(),
+                employeeSearchRequest.getGender() != null ? Gender.valueOf(employeeSearchRequest.getGender().toString()) : null,
+                employeeSearchRequest.getSalaryRange(),
+                employeeSearchRequest.getPhone(),
+                employeeSearchRequest.getDepartmentId());
     }
 
+    @Override
+    public Optional<Employee> findById(UUID id) {
+        return employeeRepository.findById(id);
+    }
 
+    @Override
+    public Employee save(Employee employee) {
+        return employeeRepository.save(employee);
+    }
+
+    @Override
+    public void delete(UUID id) {
+        employeeRepository.deleteById(id);
+    }
 
 }
 

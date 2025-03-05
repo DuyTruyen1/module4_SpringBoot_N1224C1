@@ -1,5 +1,6 @@
 package com.techzen.academy_n1224c1.repository;
 
+import com.techzen.academy_n1224c1.dto.employee.EmployeeSearchRequest;
 import com.techzen.academy_n1224c1.enums.Gender;
 import com.techzen.academy_n1224c1.modal.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -40,5 +41,6 @@ public interface IEmployeeRepository extends JpaRepository<Employee, UUID> {
             @Param("phone") String phone,
             @Param("departmentId") Integer departmentId
     );
+
 }
 
