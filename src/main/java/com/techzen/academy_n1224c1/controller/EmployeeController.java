@@ -25,41 +25,19 @@ import java.util.stream.Collectors;
 public class EmployeeController {
     IEmployeeService employeeService;
 
-
-
-    @GetMapping
-    public ResponseEntity<?> getAll(EmployeeSearchRequest employeeSearchRequest) {
-        return JsonResponse.ok(employeeService.search(employeeSearchRequest));
+    @GetMapping("/search")
+    public ResponseEntity<List<Employee>> searchEmployees(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dobFrom,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dobTo,
+            @RequestParam(required = false) Gender gender,
+            @RequestParam(required = false) String salaryRange,
+            @RequestParam(required = false) String phone,
+            @RequestParam(required = false) Integer departmentId
+    ) {
+        List<Employee> employees = employeeService.findByAttributes(name, dobFrom, dobTo, gender, salaryRange, phone, departmentId);
+        return ResponseEntity.ok(employees);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable("id") UUID id) {
-        return employeeService.findById(id)
-                .map(JsonResponse::ok)
-                .orElseThrow(() -> new ApiException(ErrorCode.EMPLOYEE_NOT_EXISTS));
-    }
-
-    @PostMapping
-    public ResponseEntity<?> create(@RequestBody Employee employee) {
-        return JsonResponse.created(employeeService.save(employee));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable("id") UUID id, @RequestBody Employee employee) {
-        employeeService.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.EMPLOYEE_NOT_EXISTS));
-
-        employee.setId(id);
-        return JsonResponse.ok(employeeService.save(employee));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable("id") UUID id) {
-        employeeService.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.EMPLOYEE_NOT_EXISTS));
-
-        employeeService.deleteById(id);
-        return JsonResponse.noContent();
-    }
 
 }

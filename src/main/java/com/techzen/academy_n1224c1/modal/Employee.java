@@ -2,10 +2,10 @@ package com.techzen.academy_n1224c1.modal;
 
 import com.techzen.academy_n1224c1.enums.Gender;
 import com.techzen.academy_n1224c1.modal.Department;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.UUID;
 
