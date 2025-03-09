@@ -1,22 +1,17 @@
 package com.techzen.academy_n1224c1.service;
 
 import com.techzen.academy_n1224c1.dto.employee.EmployeeSearchRequest;
-import com.techzen.academy_n1224c1.enums.Gender;
 import com.techzen.academy_n1224c1.modal.Employee;
-import com.techzen.academy_n1224c1.repository.IEmployeeRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface IEmployeeService {
 
 
-    List<Employee> findByAttribute(EmployeeSearchRequest employeeSearchRequest);
+    Page<Employee> findByAttribute(EmployeeSearchRequest employeeSearchRequest , Pageable pageable);
 
     Optional<Employee> findById(UUID id);
 

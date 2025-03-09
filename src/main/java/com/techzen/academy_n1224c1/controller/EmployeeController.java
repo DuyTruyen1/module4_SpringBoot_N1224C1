@@ -10,6 +10,7 @@ import com.techzen.academy_n1224c1.util.JsonResponse;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +28,8 @@ public class EmployeeController {
     IEmployeeService employeeService;
 
     @GetMapping
-    public ResponseEntity<?> getEmployees(EmployeeSearchRequest employeeSearchRequest) {
-        return ResponseEntity.ok(employeeService.findByAttribute(employeeSearchRequest));
+    public ResponseEntity<?> getEmployees(EmployeeSearchRequest employeeSearchRequest , Pageable pageable) {
+        return ResponseEntity.ok(employeeService.findByAttribute(employeeSearchRequest , pageable));
     }
 
     @GetMapping("/{id}")

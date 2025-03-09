@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -23,14 +25,17 @@ public class EmployeeService implements IEmployeeService {
     IEmployeeRepository employeeRepository;
 
     @Override
-    public List<Employee> findByAttribute(EmployeeSearchRequest employeeSearchRequest) {
-        return employeeRepository.findByAttributes(employeeSearchRequest.getName(),
+    public Page<Employee> findByAttribute(EmployeeSearchRequest employeeSearchRequest, Pageable pageable) {
+        return employeeRepository.findByAttributes(
+                employeeSearchRequest.getName(),
                 employeeSearchRequest.getDobFrom(),
                 employeeSearchRequest.getDobTo(),
-                employeeSearchRequest.getGender() != null ? Gender.valueOf(employeeSearchRequest.getGender().toString()) : null,
+                employeeSearchRequest.getGender(),
                 employeeSearchRequest.getSalaryRange(),
                 employeeSearchRequest.getPhone(),
-                employeeSearchRequest.getDepartmentId());
+                employeeSearchRequest.getDepartmentId(),
+                pageable
+        );
     }
 
     @Override
