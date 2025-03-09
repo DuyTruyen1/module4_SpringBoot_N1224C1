@@ -11,6 +11,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,9 +30,13 @@ public class EmployeeController {
     IEmployeeService employeeService;
 
     @GetMapping
-    public ResponseEntity<?> getEmployees(EmployeeSearchRequest employeeSearchRequest , Pageable pageable) {
-        return ResponseEntity.ok(employeeService.findByAttribute(employeeSearchRequest , pageable));
+    public ResponseEntity<?> getEmployees(
+            EmployeeSearchRequest employeeSearchRequest,
+            @PageableDefault(size = 20, sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+
+        return ResponseEntity.ok(employeeService.findByAttribute(employeeSearchRequest, pageable));
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Employee> getEmployeeById(@PathVariable UUID id) {
