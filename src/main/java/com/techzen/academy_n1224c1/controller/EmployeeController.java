@@ -1,26 +1,22 @@
 package com.techzen.academy_n1224c1.controller;
 
 import com.techzen.academy_n1224c1.dto.employee.EmployeeSearchRequest;
+import com.techzen.academy_n1224c1.dto.page.PageResponse;
 import com.techzen.academy_n1224c1.exception.ApiException;
 import com.techzen.academy_n1224c1.exception.ErrorCode;
 import com.techzen.academy_n1224c1.modal.Employee;
-import com.techzen.academy_n1224c1.enums.Gender;
 import com.techzen.academy_n1224c1.service.IEmployeeService;
-import com.techzen.academy_n1224c1.util.JsonResponse;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 @AllArgsConstructor
@@ -34,7 +30,7 @@ public class EmployeeController {
             EmployeeSearchRequest employeeSearchRequest,
             @PageableDefault(size = 20, sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
 
-        return ResponseEntity.ok(employeeService.findByAttribute(employeeSearchRequest, pageable));
+        return ResponseEntity.ok(new PageResponse<>(employeeService.findByAttribute(employeeSearchRequest, pageable)));
     }
 
 
